@@ -234,12 +234,12 @@ void usercontrol( void ) {
      //Arm Control
      if(Controller1.ButtonL1.pressing()) { //If L1 is pressed...
        //...Spin the arm motor forward.
-       LiftMotor.spin(vex::directionType::fwd, (armSpeedPCT/powerDiv), vex::velocityUnits::pct);
+       LiftMotor.spin(vex::directionType::fwd, (armSpeedPCT/4), vex::velocityUnits::pct); // powerdiv overwritten to 4
        //LiftMotor2.spin(vex::directionType::rev, (armSpeedPCT/powerDiv), vex::velocityUnits::pct);
      }
      else if(Controller1.ButtonL2.pressing()) { //If the L2 is pressed...
        //...Spin the arm motor backward.
-       LiftMotor.spin(vex::directionType::rev, (armSpeedPCT/powerDiv), vex::velocityUnits::pct);
+       LiftMotor.spin(vex::directionType::rev, (armSpeedPCT/4), vex::velocityUnits::pct);
        //LiftMotor2.spin(vex::directionType::fwd, (armSpeedPCT/powerDiv), vex::velocityUnits::pct);
      }
      else { //If L1 or L2 is not pressed...
