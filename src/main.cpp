@@ -29,12 +29,12 @@ competition Competition;
  
 // define your global instances of motors and other devices here
 
-void goF(int speed){
- FrontLeft.spin(directionType::fwd,100,velocityUnits::pct);
- BackLeft.spin(directionType::fwd,100,velocityUnits::pct);
- FrontRight.spin(directionType::fwd,100,velocityUnits::pct);
- BackRight.spin(directionType::fwd,100,velocityUnits::pct);
- task::sleep(speed);
+void goF(int duration, int pw = 100){
+ FrontLeft.spin(directionType::fwd,pw,velocityUnits::pct);
+ BackLeft.spin(directionType::fwd,pw,velocityUnits::pct);
+ FrontRight.spin(directionType::fwd,pw,velocityUnits::pct);
+ BackRight.spin(directionType::fwd,pw,velocityUnits::pct);
+ task::sleep(duration);
 }
  
 void goB(int duration, int pw = 100){
@@ -105,7 +105,11 @@ void updateScreen( void ) {
   Brain.Screen.print(Controller1.ButtonR1.pressing());
   Brain.Screen.print(" Controller button R2 : ");
   Brain.Screen.print(Controller1.ButtonR2.pressing());
-
+  newLine(6);
+  Brain.Screen.print("Controller Button A : ");
+  Brain.Screen.print(Controller1.ButtonA.pressing());
+  Brain.Screen.print(" Controller Button X : ");
+  Brain.Screen.print(Controller1.ButtonX.pressing());
   // DONT PRINT TO THE CONTROLLER'S BRAIN
   // (it makes the robot have a delay in it's controls)
 }
@@ -139,19 +143,30 @@ void pre_auton(void) {
 /*---------------------------------------------------------------------------*/
  
 void autonomous( void ) {
- // ..........................................................................
- // Insert autonomous user code here.
- // ..........................................................................
- newLine(1);
- Brain.Screen.print("Autonomous program started");
+  // ..........................................................................
+  // Insert autonomous user code here.
+  // ..........................................................................
+  newLine(1);
+  Brain.Screen.print("Autonomous program started");
 
- //strafeL(1500); // no clue if this is the right amount of time
+  //strafeL(1500); // no clue if this is the right amount of time
 
- // For AutonThrow (slot 2)
- LiftMotor.spin(vex::directionType::fwd, (100/8), vex::velocityUnits::pct);
- task::sleep(360);
- LiftMotor.spin(vex::directionType::rev, (100/8), vex::velocityUnits::pct);
- task::sleep(360);
+  // For AutonThrow (slot 2) (depreciated)
+  //LiftMotor.spin(vex::directionType::fwd, (100/8), vex::velocityUnits::pct);
+  //task::sleep(360);
+  //LiftMotor.spin(vex::directionType::rev, (100/8), vex::velocityUnits::pct);
+  //task::sleep(360);
+
+  // move forward, drop claw 
+  goF(1000,(100/8));
+  task::sleep(1000);
+  
+  ClawMotor.spin(vex::directionType::rev, (100/4), vex::velocityUnits::pct);
+  task::sleep(200);
+
+  goB(1000, (100/8));
+  task::sleep(500);
+
  // For Backup onto seesaw or pushing goal (slot 3) 
  //goB(950, 50);
  //goB(700, 25);
@@ -174,7 +189,7 @@ void usercontrol( void ) {
  // User control code here, inside the loop
  //Display that the program has started to the screen.
  //Use these variables to set the speed of the arm and claw.
- int armSpeedPCT = 100;
+ int armSpeedPCT = 60;
  //int clawSpeedPCT = 100;
  int minJoystickVal = 30;
  while (1) {
@@ -234,13 +249,13 @@ void usercontrol( void ) {
      //Arm Control
      if(Controller1.ButtonL1.pressing()) { //If L1 is pressed...
        //...Spin the arm motor forward.
-       LiftMotor.spin(vex::directionType::fwd, (armSpeedPCT/4), vex::velocityUnits::pct); // powerdiv overwritten to 4
-       //LiftMotor2.spin(vex::directionType::rev, (armSpeedPCT/powerDiv), vex::velocityUnits::pct);
+       LiftMotor.spin(vex::directionType::rev, (armSpeedPCT), vex::velocityUnits::pct);
+       LiftMotor2.spin(vex::directionType::fwd, (armSpeedPCT), vex::velocityUnits::pct);
      }
      else if(Controller1.ButtonL2.pressing()) { //If the L2 is pressed...
        //...Spin the arm motor backward.
-       LiftMotor.spin(vex::directionType::rev, (armSpeedPCT/4), vex::velocityUnits::pct);
-       //LiftMotor2.spin(vex::directionType::fwd, (armSpeedPCT/powerDiv), vex::velocityUnits::pct);
+       LiftMotor.spin(vex::directionType::fwd, (armSpeedPCT), vex::velocityUnits::pct);
+       LiftMotor2.spin(vex::directionType::rev, (armSpeedPCT), vex::velocityUnits::pct);
      }
      else { //If L1 or L2 is not pressed...
        //...Stop the arm motor.
@@ -251,17 +266,15 @@ void usercontrol( void ) {
      }
  
      //Claw Control
-     if(Controller1.ButtonR1.pressing()) { //If the R1 is pressed...
-       //...Spin the claw motor forward.
-       //ClawMotor.spin(vex::directionType::fwd, clawSpeedPCT, vex::velocityUnits::pct);
+     if(Controller1.ButtonA.pressing()) {
+       ClawMotor.spin(vex::directionType::rev, 80, vex::velocityUnits::pct);
      }
-     else if(Controller1.ButtonR2.pressing()) { //If the R2 is pressed...
-       //...Spin the claw motor backward.
-       //ClawMotor.spin(vex::directionType::rev, clawSpeedPCT, vex::velocityUnits::pct);
+     else if(Controller1.ButtonX.pressing()) { 
+       ClawMotor.spin(vex::directionType::fwd, 80, vex::velocityUnits::pct);
      }
      else { //If R1 or R2 are not pressed...
        //...Stop the claw motor.
-       //ClawMotor.stop(vex::brakeType::brake);
+       ClawMotor.stop(vex::brakeType::brake);
      }
     }
     vex::task::sleep(20); //Sleep the task for a short amount of time to prevent wasted resources.
@@ -278,7 +291,7 @@ int main() {
  
  // Run the pre-autonomous function.
  pre_auton();
- 
+  
  // Prevent main from exiting with an infinite loop.
  while (true) {
    wait(100, msec);
