@@ -48,6 +48,8 @@ void goB(int duration, int pw = 100){
 // idk about tr and tl 
 // change speed? 
 
+// perhaps run with rpm to have it self regulate -- more consistency.
+
 void Tr( void ){
  FrontLeft.spin(directionType::rev,100,velocityUnits::pct);
  BackLeft.spin(directionType::rev,100,velocityUnits::pct);
@@ -110,7 +112,7 @@ void updateScreen( void ) {
   Brain.Screen.print(Controller1.ButtonA.pressing());
   Brain.Screen.print(" Controller Button X : ");
   Brain.Screen.print(Controller1.ButtonX.pressing());
-  // DONT PRINT TO THE CONTROLLER'S BRAIN
+  // DONT PRINT TO THE CONTROLLER'S SCREEN
   // (it makes the robot have a delay in it's controls)
 }
 
