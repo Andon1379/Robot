@@ -86,32 +86,59 @@ void newLine(int row, bool isCont = false){
   }
 }
 // pee pee poo poo
-void updateScreen( void ) { 
+void updateScreen( int minJoystickVal ) { 
   newLine(2);
-  Brain.Screen.print("Controller axis 1 : ");
-  Brain.Screen.print(Controller1.Axis1.value() );
-  Brain.Screen.print(" Controller axis 2 : ");
-  Brain.Screen.print(Controller1.Axis2.value() );
-  newLine(3);
-  Brain.Screen.print("Controller axis 3 : ");
-  Brain.Screen.print(Controller1.Axis3.value() );
-  Brain.Screen.print(" Controller axis 4 : ");
-  Brain.Screen.print(Controller1.Axis4.value() );
-  newLine(4);
-  Brain.Screen.print("Controller button L1 : ");
-  Brain.Screen.print(Controller1.ButtonL1.pressing());
-  Brain.Screen.print(" Controller button L2 : ");
-  Brain.Screen.print(Controller1.ButtonL2.pressing());
-  newLine(5);
-  Brain.Screen.print("Controller button R1 : ");
-  Brain.Screen.print(Controller1.ButtonR1.pressing());
-  Brain.Screen.print(" Controller button R2 : ");
-  Brain.Screen.print(Controller1.ButtonR2.pressing());
-  newLine(6);
-  Brain.Screen.print("Controller Button A : ");
-  Brain.Screen.print(Controller1.ButtonA.pressing());
-  Brain.Screen.print(" Controller Button X : ");
-  Brain.Screen.print(Controller1.ButtonX.pressing());
+  //Brain.Screen.print("Controller axis 1 : ");
+  //Brain.Screen.print(Controller1.Axis1.value() );
+  //Brain.Screen.print(" Controller axis 2 : ");
+  //Brain.Screen.print(Controller1.Axis2.value() );
+  //newLine(3);
+  //Brain.Screen.print("Controller axis 3 : ");
+  //Brain.Screen.print(Controller1.Axis3.value() );
+  //Brain.Screen.print(" Controller axis 4 : ");
+  //Brain.Screen.print(Controller1.Axis4.value() );
+  //newLine(4);
+  //Brain.Screen.print("Controller button L1 : ");
+  //Brain.Screen.print(Controller1.ButtonL1.pressing());
+  //Brain.Screen.print(" Controller button L2 : ");
+  //Brain.Screen.print(Controller1.ButtonL2.pressing());
+  //newLine(5);
+  //Brain.Screen.print("Controller button R1 : ");
+  //Brain.Screen.print(Controller1.ButtonR1.pressing());
+  //Brain.Screen.print(" Controller button R2 : ");
+  //Brain.Screen.print(Controller1.ButtonR2.pressing());
+  //newLine(6);
+  //Brain.Screen.print("Controller Button A : ");
+  //Brain.Screen.print(Controller1.ButtonA.pressing());
+  //Brain.Screen.print(" Controller Button X : ");
+  //Brain.Screen.print(Controller1.ButtonX.pressing());
+
+  // 5 px margins
+  if (Controller1.ButtonL1.pressing()) {
+    Brain.Screen.drawRectangle(5, 15, 10, 10, vex::color::white);
+  } else {
+    Brain.Screen.drawRectangle(5, 15, 10, 10, vex::color::black);
+  }
+
+  if (Controller1.ButtonL2.pressing()) {
+    Brain.Screen.drawRectangle(5, 30, 10, 10, vex::color::white);
+  } else {
+    Brain.Screen.drawRectangle(5, 30, 10, 10, vex::color::black);
+  }
+
+  if (Controller1.ButtonR1.pressing()) {
+    Brain.Screen.drawRectangle(30, 15, 10, 10, vex::color::white);
+  } else {
+    Brain.Screen.drawRectangle(30, 15, 10, 10, vex::color::black);
+  }
+  if (Controller1.ButtonR2.pressing()) {
+    Brain.Screen.drawRectangle(30, 30, 10, 10, vex::color::white);
+  } else {
+    Brain.Screen.drawRectangle(30, 30, 10, 10, vex::color::black);
+  }
+
+
+
   // DONT PRINT TO THE CONTROLLER'S SCREEN
   // (it makes the robot have a delay in it's controls)
 }
@@ -213,8 +240,9 @@ void usercontrol( void ) {
     //Drive Control
     //Set the left and right motor to spin forward using the controller Axis values as the velocity value.
     newLine(1);
+    
     Brain.Screen.print("Competition User Control Started");
-    updateScreen();
+    updateScreen( minJoystickVal );
 
     if ( Controller1.ButtonR1.pressing() && Controller1.ButtonR2.pressing() ) {
       powerDiv = powerDiv * 8;
@@ -262,7 +290,7 @@ void usercontrol( void ) {
      else { //If L1 or L2 is not pressed...
        //...Stop the arm motor.
        LiftMotor.stop(vex::brakeType::brake);
-       //LiftMotor2.stop(vex::brakeType::brake);
+       LiftMotor2.stop(vex::brakeType::brake);
        // PASSIVE KEEP ARM UP (CODE THIS SOON)
        //LiftMotor2.spin(vex::directionType::rev, 0.45, (vex::velocityUnits::pct));
      }
