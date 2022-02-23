@@ -11,6 +11,7 @@ extern motor BackRight;
 extern motor LiftMotor;
 extern motor ClawMotor;
 extern motor LiftMotor2;
+extern motor BackClaw;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

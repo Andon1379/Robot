@@ -11,13 +11,14 @@
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
 // Controller1          controller                    
-// FrontLeft            motor         1               
+// FrontLeft            motor         15              
 // BackLeft             motor         8               
 // FrontRight           motor         3               
 // BackRight            motor         7               
-// LiftMotor            motor         11              
+// LiftMotor            motor         19              
 // ClawMotor            motor         21              
 // LiftMotor2           motor         20              
+// BackClaw             motor         17              
 // ---- END VEXCODE CONFIGURED DEVICES ----
  
 #include "vex.h"
@@ -28,6 +29,8 @@ using namespace vex;
 competition Competition;
  
 // define your global instances of motors and other devices here
+
+double Pi = 3.1415;
 
 void goF(int duration, int pw = 100){
  FrontLeft.spin(directionType::fwd,pw,velocityUnits::pct);
@@ -45,6 +48,19 @@ void goB(int duration, int pw = 100){
  task::sleep(duration);
 }
 
+void ClawClose(int duration, int pw =100 ) {
+  ClawMotor.spin(vex::directionType::rev, pw, vex::velocityUnits::pct);
+  task::sleep(duration);
+}
+
+void ClawOpen(int duration, int pw = 100) {
+  ClawMotor.spin(vex::directionType::fwd, pw, vex::velocityUnits::pct);
+  task::sleep(duration);
+}
+
+void drawButtonUi( int x, int y, bool isCircle = true, std::string str = "") {
+
+}
 // idk about tr and tl 
 // change speed? 
 
@@ -80,14 +96,14 @@ void newLine(int row, bool isCont = false){
   if (isCont == false) {
     Brain.Screen.setCursor(row, 1);
     Brain.Screen.clearLine();
-  } else {
+ // } else {
     //Controller1.Screen.setCursor(row, 1);
     //Controller1.Screen.clearLine();
   }
 }
 // pee pee poo poo
 void updateScreen( int minJoystickVal ) { 
-  newLine(2);
+  //newLine(2);
   //Brain.Screen.print("Controller axis 1 : ");
   //Brain.Screen.print(Controller1.Axis1.value() );
   //Brain.Screen.print(" Controller axis 2 : ");
@@ -113,32 +129,52 @@ void updateScreen( int minJoystickVal ) {
   //Brain.Screen.print(" Controller Button X : ");
   //Brain.Screen.print(Controller1.ButtonX.pressing());
 
+
+  // The image should be no larger than the V5 Screen, that is, a maximum of 480 pixels wide by 272 pixels high
   // 5 px margins
   if (Controller1.ButtonL1.pressing()) {
-    Brain.Screen.drawRectangle(5, 15, 10, 10, vex::color::white);
+    Brain.Screen.drawRectangle(15, 15, 50, 30, vex::color::white);
   } else {
-    Brain.Screen.drawRectangle(5, 15, 10, 10, vex::color::black);
+    Brain.Screen.drawRectangle(15, 15, 50, 30, vex::color::black);
   }
 
   if (Controller1.ButtonL2.pressing()) {
-    Brain.Screen.drawRectangle(5, 30, 10, 10, vex::color::white);
+    Brain.Screen.drawRectangle(15, 80, 50, 30, vex::color::white);
   } else {
-    Brain.Screen.drawRectangle(5, 30, 10, 10, vex::color::black);
-  }
+    Brain.Screen.drawRectangle(15, 80, 50, 30, vex::color::black);
+   }
 
   if (Controller1.ButtonR1.pressing()) {
-    Brain.Screen.drawRectangle(30, 15, 10, 10, vex::color::white);
+    Brain.Screen.drawRectangle(40, 15, 50, 30, vex::color::white);
   } else {
-    Brain.Screen.drawRectangle(30, 15, 10, 10, vex::color::black);
+    Brain.Screen.drawRectangle(40, 15, 50, 30, vex::color::black);
   }
+
   if (Controller1.ButtonR2.pressing()) {
-    Brain.Screen.drawRectangle(30, 30, 10, 10, vex::color::white);
+    Brain.Screen.drawRectangle(40, 80, 50, 30, vex::color::white);
   } else {
-    Brain.Screen.drawRectangle(30, 30, 10, 10, vex::color::black);
+    Brain.Screen.drawRectangle(40, 80, 50, 30, vex::color::black);
   }
 
+  if (Controller1.ButtonA.pressing()) {
+    Brain.Screen.drawCircle(45, 120, 10, vex::color::white);
+    //Brain.Screen.setPenColor(white);
+    Brain.Screen.printAt(40, 125, "A");
+  } else {
+    Brain.Screen.drawCircle(45, 120, 10, vex::color::black);
+    //Brain.Screen.setPenColor(black);
+    Brain.Screen.printAt(40, 115, "A");
+  }
 
-
+  if (Controller1.ButtonX.pressing()) {
+    Brain.Screen.drawCircle(50, 125, 10, vex::color::white);
+    //Brain.Screen.setPenColor(white);
+    Brain.Screen.printAt(45, 120, "X");
+  } else {
+    Brain.Screen.drawCircle(50, 125, 10, vex::color::black);
+    //Brain.Screen.setPenColor(black);
+    Brain.Screen.printAt(45, 120, "X");
+  }
   // DONT PRINT TO THE CONTROLLER'S SCREEN
   // (it makes the robot have a delay in it's controls)
 }
@@ -187,14 +223,16 @@ void autonomous( void ) {
   //task::sleep(360);
 
   // move forward, drop claw 
-  goF(1000,(100/8));
-  task::sleep(1000);
+  goF(1050, (100/4));
   
-  ClawMotor.spin(vex::directionType::rev, (100/4), vex::velocityUnits::pct);
-  task::sleep(200);
+  ClawClose( 75, 30 );
+  task::sleep(75);
 
-  goB(1000, (100/8));
-  task::sleep(500);
+  task::sleep(900);
+  goB(1550, (100/3));
+
+  ClawOpen( 75, 20);
+  task::sleep(75);
 
  // For Backup onto seesaw or pushing goal (slot 3) 
  //goB(950, 50);
@@ -251,6 +289,14 @@ void usercontrol( void ) {
     } else if ( !Controller1.ButtonR1.pressing() && Controller1.ButtonR2.pressing() ) {
       powerDiv = powerDiv / 1;
     }
+
+    if ( Controller1.ButtonL1.pressing() && Controller1.ButtonL2.pressing() ) {
+      powerDiv = powerDiv * 8;
+    } else if ( Controller1.ButtonL1.pressing() && !Controller1.ButtonL2.pressing() ) {
+      powerDiv = powerDiv * 4;
+    } else if ( !Controller1.ButtonL1.pressing() && Controller1.ButtonL2.pressing() ) {
+      powerDiv = powerDiv / 1;
+    }
     
     if ( Controller1.Axis2.value() < ( minJoystickVal * -1 ) || Controller1.Axis2.value() > minJoystickVal  ) {
       FrontRight.spin(vex::directionType::fwd, (Controller1.Axis2.value()/powerDiv), vex::velocityUnits::pct);
@@ -305,6 +351,17 @@ void usercontrol( void ) {
      else { //If R1 or R2 are not pressed...
        //...Stop the claw motor.
        ClawMotor.stop(vex::brakeType::brake);
+     }
+
+    if(Controller1.ButtonY.pressing()) {
+       BackClaw.spin(vex::directionType::rev, 30, vex::velocityUnits::pct);
+     }
+     else if(Controller1.ButtonB.pressing()) { 
+       BackClaw.spin(vex::directionType::fwd, 30, vex::velocityUnits::pct);
+     }
+     else { //If R1 or R2 are not pressed...
+       //...Stop the claw motor.
+       BackClaw.stop(vex::brakeType::brake);
      }
     }
     vex::task::sleep(20); //Sleep the task for a short amount of time to prevent wasted resources.
