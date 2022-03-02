@@ -175,14 +175,6 @@ void updateScreen( int minJoystickVal ) {
     //Brain.Screen.setPenColor(black);
     Brain.Screen.printAt(45, 120, "X");
   }
-
-
-  newLine(7);
-  Brain.Screen.print("Controller axis 3 : ");
-  Brain.Screen.print(Controller1.Axis3.value() );
-  Brain.Screen.print(" Controller axis 4 : ");
-  Brain.Screen.print(Controller1.Axis4.value() );
-
   // DONT PRINT TO THE CONTROLLER'S SCREEN
   // (it makes the robot have a delay in it's controls)
 }
@@ -305,36 +297,16 @@ void usercontrol( void ) {
     } else if ( !Controller1.ButtonL1.pressing() && Controller1.ButtonL2.pressing() ) {
       powerDiv = powerDiv / 1;
     }
+    
+    if ( Controller1.Axis3.value() < ( minJoystickVal * -1 ) || Controller1.Axis3.value() > minJoystickVal  ) {
+      FrontRight.spin(vex::directionType::fwd, ( (Controller1.Axis3.value() - Controller1.Axis4.value() ) /powerDiv), vex::velocityUnits::pct);
+      BackRight.spin(vex::directionType::fwd, ( (Controller1.Axis3.value() - Controller1.Axis4.value() ) /powerDiv), vex::velocityUnits::pct);
 
-    // math for 1 joystick
-    // 
-    // going forward / backward: 
-    // use axis 3
-    // 
-    // turning right: 
-    // right motors get less power
-    // left motors get more power
-    // positive axis 4 & positive axis 3
-    // negative axis 4 & negative axis 3  
-    // 
-    // turning left: 
-    // right motors get more power
-    // left motors get less power
-    // negative axis 4 & positive axis 3
-    // positive axis 4 & negative axis 3  
-
-    if ( (Controller1.Axis3.value() < ( minJoystickVal * -1 ) || Controller1.Axis3.value() > minJoystickVal)) {
-      double RmotorPowerPCT = ( (Controller1.Axis3.value() / 127) * 100 ) - ( (Controller1.Axis4.value() / 256) * 100) / powerDiv ;
-      double LmotorPowerPCT = ( (Controller1.Axis3.value() / 127) * 100 ) + ( (Controller1.Axis4.value() / 256) * 100) / powerDiv ;
-
-      FrontRight.spin(vex::directionType::fwd, RmotorPowerPCT, vex::velocityUnits::pct);
-      BackRight.spin(vex::directionType::fwd, RmotorPowerPCT , vex::velocityUnits::pct);
-
-      FrontLeft.spin(vex::directionType::fwd, LmotorPowerPCT, vex::velocityUnits::pct);
-      BackLeft.spin(vex::directionType::fwd, LmotorPowerPCT, vex::velocityUnits::pct);
+      FrontLeft.spin(vex::directionType::fwd, ( (Controller1.Axis3.value() + Controller1.Axis4.value() ) /powerDiv), vex::velocityUnits::pct);
+      BackLeft.spin(vex::directionType::fwd, ( (Controller1.Axis3.value() + Controller1.Axis4.value() ) /powerDiv), vex::velocityUnits::pct);
       task::sleep(20);
-    } // forward & backward (and turning) 
-
+    } // forward & backward (left) 
+    
     if (
       ( Controller1.Axis3.value() >= (minJoystickVal * -1) && Controller1.Axis2.value() >= (minJoystickVal * -1) ) &&
       ( Controller1.Axis3.value() <= (minJoystickVal *  1) && Controller1.Axis2.value() <= (minJoystickVal *  1))) {
