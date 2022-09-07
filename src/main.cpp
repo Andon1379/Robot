@@ -133,37 +133,37 @@ void updateScreen( int minJoystickVal ) {
   // The image should be no larger than the V5 Screen, that is, a maximum of 480 pixels wide by 272 pixels high
   // 5 px margins
   if (Controller1.ButtonL1.pressing()) {
-    Brain.Screen.drawRectangle(15, 15, 50, 30, vex::color::white);
+    Brain.Screen.drawRectangle(15, 25, 50, 30, vex::color::white);
   } else {
-    Brain.Screen.drawRectangle(15, 15, 50, 30, vex::color::black);
+    Brain.Screen.drawRectangle(15, 25, 50, 30, vex::color::black);
   }
 
   if (Controller1.ButtonL2.pressing()) {
-    Brain.Screen.drawRectangle(15, 80, 50, 30, vex::color::white);
+    Brain.Screen.drawRectangle(15, 60, 50, 30, vex::color::white);
   } else {
-    Brain.Screen.drawRectangle(15, 80, 50, 30, vex::color::black);
+    Brain.Screen.drawRectangle(15, 60, 50, 30, vex::color::black);
    }
 
   if (Controller1.ButtonR1.pressing()) {
-    Brain.Screen.drawRectangle(40, 15, 50, 30, vex::color::white);
+    Brain.Screen.drawRectangle(80, 25, 50, 30, vex::color::white);
   } else {
-    Brain.Screen.drawRectangle(40, 15, 50, 30, vex::color::black);
+    Brain.Screen.drawRectangle(80, 25, 50, 30, vex::color::black);
   }
 
   if (Controller1.ButtonR2.pressing()) {
-    Brain.Screen.drawRectangle(40, 80, 50, 30, vex::color::white);
+    Brain.Screen.drawRectangle(80, 60, 50, 30, vex::color::white);
   } else {
-    Brain.Screen.drawRectangle(40, 80, 50, 30, vex::color::black);
+    Brain.Screen.drawRectangle(80, 60, 50, 30, vex::color::black);
   }
 
   if (Controller1.ButtonA.pressing()) {
-    Brain.Screen.drawCircle(45, 120, 10, vex::color::white);
+    Brain.Screen.drawCircle(150, 50, 15, vex::color::white);
     //Brain.Screen.setPenColor(white);
-    Brain.Screen.printAt(40, 125, "A");
+    Brain.Screen.printAt(140, 65, "A");
   } else {
-    Brain.Screen.drawCircle(45, 120, 10, vex::color::black);
+    Brain.Screen.drawCircle(150, 50, 15, vex::color::black);
     //Brain.Screen.setPenColor(black);
-    Brain.Screen.printAt(40, 115, "A");
+    Brain.Screen.printAt(140, 65, "A");
   }
 
   if (Controller1.ButtonX.pressing()) {
