@@ -102,6 +102,13 @@ void newLine(int row, bool isCont = false){
   }
 }
 // pee pee poo poo
+
+void makeButtonDisp(int x, int y, char *label, color col){
+  Brain.Screen.drawCircle(x, y, 10, col);
+  //Brain.Screen.setPenColor(white);
+  Brain.Screen.printAt(x-4, y+5, label);
+}
+
 void updateScreen( int minJoystickVal ) { 
   //newLine(2);
   //Brain.Screen.print("Controller axis 1 : ");
@@ -137,7 +144,6 @@ void updateScreen( int minJoystickVal ) {
   } else {
     Brain.Screen.drawRectangle(15, 25, 50, 30, vex::color::black);
   }
-
   if (Controller1.ButtonL2.pressing()) {
     Brain.Screen.drawRectangle(15, 60, 50, 30, vex::color::white);
   } else {
@@ -149,31 +155,34 @@ void updateScreen( int minJoystickVal ) {
   } else {
     Brain.Screen.drawRectangle(80, 25, 50, 30, vex::color::black);
   }
-
   if (Controller1.ButtonR2.pressing()) {
     Brain.Screen.drawRectangle(80, 60, 50, 30, vex::color::white);
   } else {
     Brain.Screen.drawRectangle(80, 60, 50, 30, vex::color::black);
   }
 
-  if (Controller1.ButtonA.pressing()) {
-    Brain.Screen.drawCircle(150, 50, 15, vex::color::white);
-    //Brain.Screen.setPenColor(white);
-    Brain.Screen.printAt(140, 65, "A");
+  if (Controller1.ButtonX.pressing()) {
+    makeButtonDisp(166, 40, "x", vex::color::white);
   } else {
-    Brain.Screen.drawCircle(150, 50, 15, vex::color::black);
-    //Brain.Screen.setPenColor(black);
-    Brain.Screen.printAt(140, 65, "A");
+    makeButtonDisp(166, 40, "x", vex::color::black);
   }
 
-  if (Controller1.ButtonX.pressing()) {
-    Brain.Screen.drawCircle(50, 125, 10, vex::color::white);
-    //Brain.Screen.setPenColor(white);
-    Brain.Screen.printAt(45, 120, "X");
+  if (Controller1.ButtonA.pressing()) {
+    makeButtonDisp(182, 65, "a", vex::color::white);
   } else {
-    Brain.Screen.drawCircle(50, 125, 10, vex::color::black);
-    //Brain.Screen.setPenColor(black);
-    Brain.Screen.printAt(45, 120, "X");
+    makeButtonDisp(182, 65, "a", vex::color::black);
+  }
+
+  if (Controller1.ButtonB.pressing()) {
+    makeButtonDisp(166, 90, "b", vex::color::white);
+  } else {
+    makeButtonDisp(166, 90, "b", vex::color::black);
+  }
+
+  if (Controller1.ButtonY.pressing()) {
+    makeButtonDisp(150, 65, "y", vex::color::white);
+  } else {
+    makeButtonDisp(150, 65, "y", vex::color::black);
   }
 
 
@@ -182,6 +191,11 @@ void updateScreen( int minJoystickVal ) {
   Brain.Screen.print(Controller1.Axis3.value() );
   Brain.Screen.print(" Controller axis 4 : ");
   Brain.Screen.print(Controller1.Axis4.value() );
+  newLine(8);
+  Brain.Screen.print("Controller axis 2 : ");
+  Brain.Screen.print(Controller1.Axis2.value() );
+  Brain.Screen.print(" Controller axis 1 : ");
+  Brain.Screen.print(Controller1.Axis1.value() );
 
   // DONT PRINT TO THE CONTROLLER'S SCREEN
   // (it makes the robot have a delay in it's controls)
