@@ -11,7 +11,7 @@
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
 // Controller1          controller                    
-// FrontLeft            motor         15              
+// FrontLeft            motor         5               
 // BackLeft             motor         8               
 // FrontRight           motor         3               
 // BackRight            motor         7               
@@ -102,79 +102,76 @@ void newLine(int row, bool isCont = false){
   }
 }
 // pee pee poo poo
-void updateScreen( int minJoystickVal ) { 
-  //newLine(2);
-  //Brain.Screen.print("Controller axis 1 : ");
-  //Brain.Screen.print(Controller1.Axis1.value() );
-  //Brain.Screen.print(" Controller axis 2 : ");
-  //Brain.Screen.print(Controller1.Axis2.value() );
-  //newLine(3);
-  //Brain.Screen.print("Controller axis 3 : ");
-  //Brain.Screen.print(Controller1.Axis3.value() );
-  //Brain.Screen.print(" Controller axis 4 : ");
-  //Brain.Screen.print(Controller1.Axis4.value() );
-  //newLine(4);
-  //Brain.Screen.print("Controller button L1 : ");
-  //Brain.Screen.print(Controller1.ButtonL1.pressing());
-  //Brain.Screen.print(" Controller button L2 : ");
-  //Brain.Screen.print(Controller1.ButtonL2.pressing());
-  //newLine(5);
-  //Brain.Screen.print("Controller button R1 : ");
-  //Brain.Screen.print(Controller1.ButtonR1.pressing());
-  //Brain.Screen.print(" Controller button R2 : ");
-  //Brain.Screen.print(Controller1.ButtonR2.pressing());
-  //newLine(6);
-  //Brain.Screen.print("Controller Button A : ");
-  //Brain.Screen.print(Controller1.ButtonA.pressing());
-  //Brain.Screen.print(" Controller Button X : ");
-  //Brain.Screen.print(Controller1.ButtonX.pressing());
 
+void makeButtonDisp(int x, int y, char *label, color col, color col2){  
+  Brain.Screen.drawCircle(x, y, 10, col);
+  Brain.Screen.setPenColor(col2);
+  Brain.Screen.printAt(x-4, y+5, false, label);
+  Brain.Screen.setPenColor(vex::color::white);  // set back to default
+}
+
+void updateScreen( int minJoystickVal ) {
 
   // The image should be no larger than the V5 Screen, that is, a maximum of 480 pixels wide by 272 pixels high
   // 5 px margins
   if (Controller1.ButtonL1.pressing()) {
-    Brain.Screen.drawRectangle(15, 15, 50, 30, vex::color::white);
+    Brain.Screen.drawRectangle(15, 25, 50, 30, vex::color::white);
   } else {
-    Brain.Screen.drawRectangle(15, 15, 50, 30, vex::color::black);
+    Brain.Screen.drawRectangle(15, 25, 50, 30, vex::color::black);
   }
-
   if (Controller1.ButtonL2.pressing()) {
-    Brain.Screen.drawRectangle(15, 80, 50, 30, vex::color::white);
+    Brain.Screen.drawRectangle(15, 60, 50, 30, vex::color::white);
   } else {
-    Brain.Screen.drawRectangle(15, 80, 50, 30, vex::color::black);
+    Brain.Screen.drawRectangle(15, 60, 50, 30, vex::color::black);
    }
 
   if (Controller1.ButtonR1.pressing()) {
-    Brain.Screen.drawRectangle(40, 15, 50, 30, vex::color::white);
+    Brain.Screen.drawRectangle(80, 25, 50, 30, vex::color::white);
   } else {
-    Brain.Screen.drawRectangle(40, 15, 50, 30, vex::color::black);
+    Brain.Screen.drawRectangle(80, 25, 50, 30, vex::color::black);
   }
-
   if (Controller1.ButtonR2.pressing()) {
-    Brain.Screen.drawRectangle(40, 80, 50, 30, vex::color::white);
+    Brain.Screen.drawRectangle(80, 60, 50, 30, vex::color::white);
   } else {
-    Brain.Screen.drawRectangle(40, 80, 50, 30, vex::color::black);
-  }
-
-  if (Controller1.ButtonA.pressing()) {
-    Brain.Screen.drawCircle(45, 120, 10, vex::color::white);
-    //Brain.Screen.setPenColor(white);
-    Brain.Screen.printAt(40, 125, "A");
-  } else {
-    Brain.Screen.drawCircle(45, 120, 10, vex::color::black);
-    //Brain.Screen.setPenColor(black);
-    Brain.Screen.printAt(40, 115, "A");
+    Brain.Screen.drawRectangle(80, 60, 50, 30, vex::color::black);
   }
 
   if (Controller1.ButtonX.pressing()) {
-    Brain.Screen.drawCircle(50, 125, 10, vex::color::white);
-    //Brain.Screen.setPenColor(white);
-    Brain.Screen.printAt(45, 120, "X");
+    makeButtonDisp(166, 40, "x", vex::color::white, vex::color::black);
   } else {
-    Brain.Screen.drawCircle(50, 125, 10, vex::color::black);
-    //Brain.Screen.setPenColor(black);
-    Brain.Screen.printAt(45, 120, "X");
+    makeButtonDisp(166, 40, "x", vex::color::black, vex::color::white);
   }
+
+  if (Controller1.ButtonA.pressing()) {
+    makeButtonDisp(182, 65, "a", vex::color::white, vex::color::black);
+  } else {
+    makeButtonDisp(182, 65, "a", vex::color::black, vex::color::white);
+  }
+
+  if (Controller1.ButtonB.pressing()) {
+    makeButtonDisp(166, 90, "b", vex::color::white, vex::color::black);
+  } else {
+    makeButtonDisp(166, 90, "b", vex::color::black, vex::color::white);
+  }
+
+  if (Controller1.ButtonY.pressing()) {
+    makeButtonDisp(150, 65, "y", vex::color::white, vex::color::black);
+  } else {
+    makeButtonDisp(150, 65, "y", vex::color::black, vex::color::white);
+  }
+
+
+  newLine(7);
+  Brain.Screen.print("Controller axis 3 : ");
+  Brain.Screen.print(Controller1.Axis3.value() );
+  Brain.Screen.print(" Controller axis 4 : ");
+  Brain.Screen.print(Controller1.Axis4.value() );
+  newLine(8);
+  Brain.Screen.print("Controller axis 2 : ");
+  Brain.Screen.print(Controller1.Axis2.value() );
+  Brain.Screen.print(" Controller axis 1 : ");
+  Brain.Screen.print(Controller1.Axis1.value() );
+
   // DONT PRINT TO THE CONTROLLER'S SCREEN
   // (it makes the robot have a delay in it's controls)
 }
@@ -258,7 +255,7 @@ void usercontrol( void ) {
  //Use these variables to set the speed of the arm and claw.
  int armSpeedPCT = 60;
  //int clawSpeedPCT = 100;
- int minJoystickVal = 30;
+ int minJoystickVal = 0;//30;
  while (1) {
     int powerDiv = 1;
     //Create an infinite loop so that the program can pull remote control values every iteration.
@@ -297,19 +294,36 @@ void usercontrol( void ) {
     } else if ( !Controller1.ButtonL1.pressing() && Controller1.ButtonL2.pressing() ) {
       powerDiv = powerDiv / 1;
     }
-    
-    if ( Controller1.Axis2.value() < ( minJoystickVal * -1 ) || Controller1.Axis2.value() > minJoystickVal  ) {
-      FrontRight.spin(vex::directionType::fwd, (Controller1.Axis2.value()/powerDiv), vex::velocityUnits::pct);
-      BackRight.spin(vex::directionType::fwd, (Controller1.Axis2.value()/powerDiv), vex::velocityUnits::pct);
+
+    // math for 1 joystick
+    // 
+    // going forward / backward: 
+    // use axis 3
+    // 
+    // turning right: 
+    // right motors get less power
+    // left motors get more power
+    // positive axis 4 & positive axis 3
+    // negative axis 4 & negative axis 3  
+    // 
+    // turning left: 
+    // right motors get more power
+    // left motors get less power
+    // negative axis 4 & positive axis 3
+    // positive axis 4 & negative axis 3  
+
+    if ( (Controller1.Axis3.value() < ( minJoystickVal * -1 ) || Controller1.Axis3.value() > minJoystickVal)) {
+      double RmotorPowerPCT = ( (Controller1.Axis3.value() / 127) * 100 ) - ( (Controller1.Axis4.value() / 127) * 100) / powerDiv ;
+      double LmotorPowerPCT = ( (Controller1.Axis3.value() / 127) * 100 ) + ( (Controller1.Axis4.value() / 127) * 100) / powerDiv ;
+
+      FrontRight.spin(vex::directionType::fwd, RmotorPowerPCT, vex::velocityUnits::pct);
+      BackRight.spin(vex::directionType::fwd, RmotorPowerPCT , vex::velocityUnits::pct);
+
+      FrontLeft.spin(vex::directionType::fwd, LmotorPowerPCT, vex::velocityUnits::pct);
+      BackLeft.spin(vex::directionType::fwd, LmotorPowerPCT, vex::velocityUnits::pct);
       task::sleep(20);
-    } // forward & backward (right)
-    
-    if ( Controller1.Axis3.value() < ( minJoystickVal * -1 ) || Controller1.Axis3.value() > minJoystickVal  ) {
-      FrontLeft.spin(vex::directionType::fwd, (Controller1.Axis3.value()/powerDiv), vex::velocityUnits::pct);
-      BackLeft.spin(vex::directionType::fwd, (Controller1.Axis3.value()/powerDiv), vex::velocityUnits::pct);
-      task::sleep(20);
-    } // forward & backward (left) 
-    
+    } // forward & backward (and turning) 
+
     if (
       ( Controller1.Axis3.value() >= (minJoystickVal * -1) && Controller1.Axis2.value() >= (minJoystickVal * -1) ) &&
       ( Controller1.Axis3.value() <= (minJoystickVal *  1) && Controller1.Axis2.value() <= (minJoystickVal *  1))) {
