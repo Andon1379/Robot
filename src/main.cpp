@@ -11,7 +11,7 @@
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
 // Controller1          controller                    
-// FrontLeft            motor         15              
+// FrontLeft            motor         5               
 // BackLeft             motor         8               
 // FrontRight           motor         3               
 // BackRight            motor         7               
@@ -103,39 +103,14 @@ void newLine(int row, bool isCont = false){
 }
 // pee pee poo poo
 
-void makeButtonDisp(int x, int y, char *label, color col){
+void makeButtonDisp(int x, int y, char *label, color col, color col2){  
   Brain.Screen.drawCircle(x, y, 10, col);
-  //Brain.Screen.setPenColor(white);
-  Brain.Screen.printAt(x-4, y+5, label);
+  Brain.Screen.setPenColor(col2);
+  Brain.Screen.printAt(x-4, y+5, false, label);
+  Brain.Screen.setPenColor(vex::color::white);  // set back to default
 }
 
-void updateScreen( int minJoystickVal ) { 
-  //newLine(2);
-  //Brain.Screen.print("Controller axis 1 : ");
-  //Brain.Screen.print(Controller1.Axis1.value() );
-  //Brain.Screen.print(" Controller axis 2 : ");
-  //Brain.Screen.print(Controller1.Axis2.value() );
-  //newLine(3);
-  //Brain.Screen.print("Controller axis 3 : ");
-  //Brain.Screen.print(Controller1.Axis3.value() );
-  //Brain.Screen.print(" Controller axis 4 : ");
-  //Brain.Screen.print(Controller1.Axis4.value() );
-  //newLine(4);
-  //Brain.Screen.print("Controller button L1 : ");
-  //Brain.Screen.print(Controller1.ButtonL1.pressing());
-  //Brain.Screen.print(" Controller button L2 : ");
-  //Brain.Screen.print(Controller1.ButtonL2.pressing());
-  //newLine(5);
-  //Brain.Screen.print("Controller button R1 : ");
-  //Brain.Screen.print(Controller1.ButtonR1.pressing());
-  //Brain.Screen.print(" Controller button R2 : ");
-  //Brain.Screen.print(Controller1.ButtonR2.pressing());
-  //newLine(6);
-  //Brain.Screen.print("Controller Button A : ");
-  //Brain.Screen.print(Controller1.ButtonA.pressing());
-  //Brain.Screen.print(" Controller Button X : ");
-  //Brain.Screen.print(Controller1.ButtonX.pressing());
-
+void updateScreen( int minJoystickVal ) {
 
   // The image should be no larger than the V5 Screen, that is, a maximum of 480 pixels wide by 272 pixels high
   // 5 px margins
@@ -162,27 +137,27 @@ void updateScreen( int minJoystickVal ) {
   }
 
   if (Controller1.ButtonX.pressing()) {
-    makeButtonDisp(166, 40, "x", vex::color::white);
+    makeButtonDisp(166, 40, "x", vex::color::white, vex::color::black);
   } else {
-    makeButtonDisp(166, 40, "x", vex::color::black);
+    makeButtonDisp(166, 40, "x", vex::color::black, vex::color::white);
   }
 
   if (Controller1.ButtonA.pressing()) {
-    makeButtonDisp(182, 65, "a", vex::color::white);
+    makeButtonDisp(182, 65, "a", vex::color::white, vex::color::black);
   } else {
-    makeButtonDisp(182, 65, "a", vex::color::black);
+    makeButtonDisp(182, 65, "a", vex::color::black, vex::color::white);
   }
 
   if (Controller1.ButtonB.pressing()) {
-    makeButtonDisp(166, 90, "b", vex::color::white);
+    makeButtonDisp(166, 90, "b", vex::color::white, vex::color::black);
   } else {
-    makeButtonDisp(166, 90, "b", vex::color::black);
+    makeButtonDisp(166, 90, "b", vex::color::black, vex::color::white);
   }
 
   if (Controller1.ButtonY.pressing()) {
-    makeButtonDisp(150, 65, "y", vex::color::white);
+    makeButtonDisp(150, 65, "y", vex::color::white, vex::color::black);
   } else {
-    makeButtonDisp(150, 65, "y", vex::color::black);
+    makeButtonDisp(150, 65, "y", vex::color::black, vex::color::white);
   }
 
 
@@ -280,7 +255,7 @@ void usercontrol( void ) {
  //Use these variables to set the speed of the arm and claw.
  int armSpeedPCT = 60;
  //int clawSpeedPCT = 100;
- int minJoystickVal = 30;
+ int minJoystickVal = 0;//30;
  while (1) {
     int powerDiv = 1;
     //Create an infinite loop so that the program can pull remote control values every iteration.
@@ -338,8 +313,8 @@ void usercontrol( void ) {
     // positive axis 4 & negative axis 3  
 
     if ( (Controller1.Axis3.value() < ( minJoystickVal * -1 ) || Controller1.Axis3.value() > minJoystickVal)) {
-      double RmotorPowerPCT = ( (Controller1.Axis3.value() / 127) * 100 ) - ( (Controller1.Axis4.value() / 256) * 100) / powerDiv ;
-      double LmotorPowerPCT = ( (Controller1.Axis3.value() / 127) * 100 ) + ( (Controller1.Axis4.value() / 256) * 100) / powerDiv ;
+      double RmotorPowerPCT = ( (Controller1.Axis3.value() / 127) * 100 ) - ( (Controller1.Axis4.value() / 127) * 100) / powerDiv ;
+      double LmotorPowerPCT = ( (Controller1.Axis3.value() / 127) * 100 ) + ( (Controller1.Axis4.value() / 127) * 100) / powerDiv ;
 
       FrontRight.spin(vex::directionType::fwd, RmotorPowerPCT, vex::velocityUnits::pct);
       BackRight.spin(vex::directionType::fwd, RmotorPowerPCT , vex::velocityUnits::pct);
