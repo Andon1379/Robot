@@ -171,6 +171,7 @@ void updateScreen( int minJoystickVal ) {
   Brain.Screen.print(Controller1.Axis2.value() );
   Brain.Screen.print(" Controller axis 1 : ");
   Brain.Screen.print(Controller1.Axis1.value() );
+  vex::task::sleep(20);
 
   // DONT PRINT TO THE CONTROLLER'S SCREEN
   // (it makes the robot have a delay in it's controls)
@@ -255,7 +256,7 @@ void usercontrol( void ) {
  //Use these variables to set the speed of the arm and claw.
  int armSpeedPCT = 60;
  //int clawSpeedPCT = 100;
- int minJoystickVal = 0;//30;
+ int minJoystickVal = 30;
  while (1) {
     int powerDiv = 1;
     //Create an infinite loop so that the program can pull remote control values every iteration.
@@ -313,8 +314,8 @@ void usercontrol( void ) {
     // positive axis 4 & negative axis 3  
 
     if ( (Controller1.Axis3.value() < ( minJoystickVal * -1 ) || Controller1.Axis3.value() > minJoystickVal)) {
-      double RmotorPowerPCT = ( (Controller1.Axis3.value() / 127) * 100 ) - ( (Controller1.Axis4.value() / 127) * 100) / powerDiv ;
-      double LmotorPowerPCT = ( (Controller1.Axis3.value() / 127) * 100 ) + ( (Controller1.Axis4.value() / 127) * 100) / powerDiv ;
+      double RmotorPowerPCT = ( ( (Controller1.Axis3.value() + Controller1.Axis4.value() ) / 127) * 100 ) - ( (Controller1.Axis4.value() / 127) * 100) / powerDiv ;
+      double LmotorPowerPCT = ( ( (Controller1.Axis3.value() + Controller1.Axis4.value() ) / 127) * 100 ) + ( (Controller1.Axis4.value() / 127) * 100) / powerDiv ;
 
       FrontRight.spin(vex::directionType::fwd, RmotorPowerPCT, vex::velocityUnits::pct);
       BackRight.spin(vex::directionType::fwd, RmotorPowerPCT , vex::velocityUnits::pct);
@@ -325,8 +326,8 @@ void usercontrol( void ) {
     } // forward & backward (and turning) 
 
     if (
-      ( Controller1.Axis3.value() >= (minJoystickVal * -1) && Controller1.Axis2.value() >= (minJoystickVal * -1) ) &&
-      ( Controller1.Axis3.value() <= (minJoystickVal *  1) && Controller1.Axis2.value() <= (minJoystickVal *  1))) {
+      ( Controller1.Axis3.value() >= (minJoystickVal * -1) && Controller1.Axis4.value() >= (minJoystickVal * -1) ) &&
+      ( Controller1.Axis3.value() <= (minJoystickVal *  1) && Controller1.Axis4.value() <= (minJoystickVal *  1))) {
       FrontLeft.spin(vex::directionType::fwd, (0), vex::velocityUnits::pct);
       BackLeft.spin(vex::directionType::fwd, (0), vex::velocityUnits::pct);
       FrontRight.spin(vex::directionType::fwd, (0), vex::velocityUnits::pct);
