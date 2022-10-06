@@ -254,7 +254,7 @@ void usercontrol( void ) {
  // User control code here, inside the loop
  //Display that the program has started to the screen.
  //Use these variables to set the speed of the arm and claw.
- int armSpeedPCT = 60;
+ int armSpeedPCT = 80;
  //int clawSpeedPCT = 100;
  int minJoystickVal = 30;
  while (1) {
