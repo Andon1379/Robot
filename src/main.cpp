@@ -15,10 +15,10 @@
 // BackLeft             motor         8               
 // FrontRight           motor         3               
 // BackRight            motor         7               
-// LiftMotor            motor         19              
-// ClawMotor            motor         21              
-// LiftMotor2           motor         20              
-// BackClaw             motor         17              
+// intakeMotor          motor         19              
+// launchMotor          motor         21              
+// intakeMotor2         motor         18              
+// flyWheel             motor         17              
 // ---- END VEXCODE CONFIGURED DEVICES ----
  
 #include "vex.h"
@@ -49,18 +49,20 @@ void goB(int duration, int pw = 100){
 }
 
 void ClawClose(int duration, int pw =100 ) {
-  ClawMotor.spin(vex::directionType::rev, pw, vex::velocityUnits::pct);
+  launchMotor.spin(vex::directionType::rev, pw, vex::velocityUnits::pct);
   task::sleep(duration);
 }
 
 void ClawOpen(int duration, int pw = 100) {
-  ClawMotor.spin(vex::directionType::fwd, pw, vex::velocityUnits::pct);
+  launchMotor.spin(vex::directionType::fwd, pw, vex::velocityUnits::pct);
   task::sleep(duration);
 }
 
-void drawButtonUi( int x, int y, bool isCircle = true, std::string str = "") {
+//void drawButtonUi( int x, int y, bool isCircle = true, std::string str = "") {
 
-}
+//}
+
+
 // idk about tr and tl 
 // change speed? 
 
@@ -87,9 +89,9 @@ void allStop( void ){
  FrontRight.stop();
  BackLeft.stop();
  BackRight.stop();
- LiftMotor.stop();
- LiftMotor2.stop();
- ClawMotor.stop();
+ intakeMotor.stop();
+ intakeMotor2.stop();
+ launchMotor.stop();
 }
  
 void newLine(int row, bool isCont = false){
@@ -215,9 +217,9 @@ void autonomous( void ) {
   //strafeL(1500); // no clue if this is the right amount of time
 
   // For AutonThrow (slot 2) (depreciated)
-  //LiftMotor.spin(vex::directionType::fwd, (100/8), vex::velocityUnits::pct);
+  //intakeMotor.spin(vex::directionType::fwd, (100/8), vex::velocityUnits::pct);
   //task::sleep(360);
-  //LiftMotor.spin(vex::directionType::rev, (100/8), vex::velocityUnits::pct);
+  //intakeMotor.spin(vex::directionType::rev, (100/8), vex::velocityUnits::pct);
   //task::sleep(360);
 
   // move forward, drop claw 
@@ -266,20 +268,14 @@ void usercontrol( void ) {
     //This is the main execution loop for the user control program.
     // Each time through the loop your program should update motor + servo
     // values based on feedback from the joysticks.
-  
-    // ........................................................................
-    // Insert user code here. This is where you use the joystick values to
-    // update your motors, etc.
-    // ........................................................................
-    //================================================= 
-  
-    //Drive Control
-    //Set the left and right motor to spin forward using the controller Axis values as the velocity value.
+    
     newLine(1);
     
     Brain.Screen.print("Competition User Control Started");
     updateScreen( minJoystickVal );
 
+    // disabled powerdiv for r1 and r2 because using for launcher motor
+    /*
     if ( Controller1.ButtonR1.pressing() && Controller1.ButtonR2.pressing() ) {
       powerDiv = powerDiv * 8;
     } else if ( Controller1.ButtonR1.pressing() && !Controller1.ButtonR2.pressing() ) {
@@ -287,6 +283,7 @@ void usercontrol( void ) {
     } else if ( !Controller1.ButtonR1.pressing() && Controller1.ButtonR2.pressing() ) {
       powerDiv = powerDiv / 1;
     }
+    */
 
     if ( Controller1.ButtonL1.pressing() && Controller1.ButtonL2.pressing() ) {
       powerDiv = powerDiv * 8;
@@ -319,49 +316,45 @@ void usercontrol( void ) {
     } // stopping
 
     //https://docs.google.com/document/d/1MOMd-QA1tYjjyFQMGFb24nPcB9Q2MZVH7CbmG1IY6RA/edit
-      // why does this end the while loop
-     //Arm Control
-     if(Controller1.ButtonL1.pressing()) { //If L1 is pressed...
-       //...Spin the arm motor forward.
-       LiftMotor.spin(vex::directionType::rev, (armSpeedPCT), vex::velocityUnits::pct);
-       LiftMotor2.spin(vex::directionType::fwd, (armSpeedPCT), vex::velocityUnits::pct);
-     }
-     else if(Controller1.ButtonL2.pressing()) { //If the L2 is pressed...
-       //...Spin the arm motor backward.
-       LiftMotor.spin(vex::directionType::fwd, (armSpeedPCT), vex::velocityUnits::pct);
-       LiftMotor2.spin(vex::directionType::rev, (armSpeedPCT), vex::velocityUnits::pct);
-     }
-     else { //If L1 or L2 is not pressed...
-       //...Stop the arm motor.
-       LiftMotor.stop(vex::brakeType::brake);
-       LiftMotor2.stop(vex::brakeType::brake);
-       // PASSIVE KEEP ARM UP (CODE THIS SOON)
-       //LiftMotor2.spin(vex::directionType::rev, 0.45, (vex::velocityUnits::pct));
-     }
- 
-     //Claw Control
-     if(Controller1.ButtonA.pressing()) {
-       ClawMotor.spin(vex::directionType::rev, 80, vex::velocityUnits::pct);
-     }
-     else if(Controller1.ButtonX.pressing()) { 
-       ClawMotor.spin(vex::directionType::fwd, 80, vex::velocityUnits::pct);
-     }
-     else { //If R1 or R2 are not pressed...
-       //...Stop the claw motor.
-       ClawMotor.stop(vex::brakeType::brake);
-     }
+    // why does this end the while loop
+    
+    if(true){//Controller1.ButtonR1.pressing()) {
+      intakeMotor.spin(vex::directionType::rev, (armSpeedPCT), vex::velocityUnits::pct);
+      intakeMotor2.spin(vex::directionType::fwd, (armSpeedPCT), vex::velocityUnits::pct);
+    }
+    else if(false){//Controller1.ButtonR2.pressing()) {
+      intakeMotor.spin(vex::directionType::fwd, (armSpeedPCT), vex::velocityUnits::pct);
+      intakeMotor2.spin(vex::directionType::rev, (armSpeedPCT), vex::velocityUnits::pct);
+    }
+    else {
+      intakeMotor.stop(vex::brakeType::brake);
+      intakeMotor2.stop(vex::brakeType::brake);
+    }
 
-    if(Controller1.ButtonY.pressing()) {
-       BackClaw.spin(vex::directionType::rev, 30, vex::velocityUnits::pct);
+    // launcher motor
+    if(Controller1.ButtonR2.pressing()) {
+      launchMotor.spin(vex::directionType::rev, 80, vex::velocityUnits::pct);
+    }
+    /*else if(Controller1.ButtonX.pressing()) { 
+      launchMotor.spin(vex::directionType::fwd, 80, vex::velocityUnits::pct);
+    } */
+    else { 
+      launchMotor.stop(vex::brakeType::brake);
+    }
+
+    // FlyWheel
+    if(Controller1.ButtonR1.pressing()) {
+       flyWheel.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
      }
-     else if(Controller1.ButtonB.pressing()) { 
-       BackClaw.spin(vex::directionType::fwd, 30, vex::velocityUnits::pct);
-     }
-     else { //If R1 or R2 are not pressed...
-       //...Stop the claw motor.
-       BackClaw.stop(vex::brakeType::brake);
+    /*else if(Controller1.ButtonB.pressing()) { 
+      flyWheel.spin(vex::directionType::fwd, 30, vex::velocityUnits::pct);
+    }*/
+     else { 
+       flyWheel.stop(vex::brakeType::brake);
      }
     }
+
+
     vex::task::sleep(20); //Sleep the task for a short amount of time to prevent wasted resources.
  }
 
