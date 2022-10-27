@@ -11,7 +11,7 @@
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
 // Controller1          controller                    
-// FrontLeft            motor         15              
+// FrontLeft            motor         5               
 // BackLeft             motor         8               
 // FrontRight           motor         3               
 // BackRight            motor         7               
@@ -214,31 +214,9 @@ void autonomous( void ) {
   newLine(1);
   Brain.Screen.print("Autonomous program started");
 
-  //strafeL(1500); // no clue if this is the right amount of time
+  goF(100);
 
-  // For AutonThrow (slot 2) (depreciated)
-  //intakeMotor.spin(vex::directionType::fwd, (100/8), vex::velocityUnits::pct);
-  //task::sleep(360);
-  //intakeMotor.spin(vex::directionType::rev, (100/8), vex::velocityUnits::pct);
-  //task::sleep(360);
-
-  // move forward, drop claw 
-  goF(1050, (100/4));
-  
-  ClawClose( 75, 30 );
-  task::sleep(75);
-
-  task::sleep(900);
-  goB(1550, (100/3));
-
-  ClawOpen( 75, 20);
-  task::sleep(75);
-
- // For Backup onto seesaw or pushing goal (slot 3) 
- //goB(950, 50);
- //goB(700, 25);
-
- allStop();
+  allStop();
 }
  
  
@@ -333,11 +311,11 @@ void usercontrol( void ) {
 
     // launcher motor
     if(Controller1.ButtonR2.pressing()) {
-      launchMotor.spin(vex::directionType::rev, 80, vex::velocityUnits::pct);
-    }
-    /*else if(Controller1.ButtonX.pressing()) { 
       launchMotor.spin(vex::directionType::fwd, 80, vex::velocityUnits::pct);
-    } */
+    }
+    else if(Controller1.ButtonR1.pressing()) { 
+      launchMotor.spin(vex::directionType::rev, 80, vex::velocityUnits::pct);
+    } 
     else { 
       launchMotor.stop(vex::brakeType::brake);
     }
