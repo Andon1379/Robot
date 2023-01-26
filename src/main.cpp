@@ -231,13 +231,13 @@ void autonomous( void ) {
 /*---------------------------------------------------------------------------*/
  
 void usercontrol( void ) {
- // User control code here, inside the loop
- //Display that the program has started to the screen.
- //Use these variables to set the speed of the arm and claw.
- int armSpeedPCT = 80;
- //int clawSpeedPCT = 100;
- int minJoystickVal = 30;
- while (1) {
+  // User control code here, inside the loop
+  //Display that the program has started to the screen.
+  //Use these variables to set the speed of the arm and claw.
+  int armSpeedPCT = 80;
+  //int clawSpeedPCT = 100;
+  int minJoystickVal = 30;
+  while (1) {
     int powerDiv = 1;
     //Create an infinite loop so that the program can pull remote control values every iteration.
     
@@ -252,8 +252,6 @@ void usercontrol( void ) {
     Brain.Screen.print("Competition User Control Started");
     updateScreen( minJoystickVal );
 
-    // disabled powerdiv for r1 and r2 because using for launcher motor
-    /*
     if ( Controller1.ButtonR1.pressing() && Controller1.ButtonR2.pressing() ) {
       powerDiv = powerDiv * 8;
     } else if ( Controller1.ButtonR1.pressing() && !Controller1.ButtonR2.pressing() ) {
@@ -261,15 +259,7 @@ void usercontrol( void ) {
     } else if ( !Controller1.ButtonR1.pressing() && Controller1.ButtonR2.pressing() ) {
       powerDiv = powerDiv / 1;
     }
-    */
-
-    if ( Controller1.ButtonL1.pressing() && Controller1.ButtonL2.pressing() ) {
-      powerDiv = powerDiv * 8;
-    } else if ( Controller1.ButtonL1.pressing() && !Controller1.ButtonL2.pressing() ) {
-      powerDiv = powerDiv * 4;
-    } else if ( !Controller1.ButtonL1.pressing() && Controller1.ButtonL2.pressing() ) {
-      powerDiv = powerDiv / 1;
-    }
+    
     
     if ( Controller1.Axis2.value() < ( minJoystickVal * -1 ) || Controller1.Axis2.value() > minJoystickVal  ) {
       FrontRight.spin(vex::directionType::fwd, (Controller1.Axis2.value()/powerDiv), vex::velocityUnits::pct);
@@ -308,33 +298,25 @@ void usercontrol( void ) {
       intakeMotor.stop(vex::brakeType::brake);
       intakeMotor2.stop(vex::brakeType::brake);
     }
-
-    // launcher motor
-    if(Controller1.ButtonR2.pressing()) {
-      launchMotor.spin(vex::directionType::fwd, 80, vex::velocityUnits::pct);
-    }
-    else if(Controller1.ButtonR1.pressing()) { 
-      launchMotor.spin(vex::directionType::rev, 80, vex::velocityUnits::pct);
-    } 
-    else { 
-      launchMotor.stop(vex::brakeType::brake);
-    }
-
-    // FlyWheel
-    if(Controller1.ButtonR1.pressing()) {
-       flyWheel.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
-     }
-    /*else if(Controller1.ButtonB.pressing()) { 
+      
+    if ( Controller1.ButtonL1.pressing() ) {
+      flyWheel.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
+    } else if ( Controller1.ButtonL2.pressing() ) {
       flyWheel.spin(vex::directionType::fwd, 30, vex::velocityUnits::pct);
-    }*/
-     else { 
-       flyWheel.stop(vex::brakeType::brake);
-     }
-    }
+    } else if ( Controller1.ButtonY.pressing() ) {
+      flyWheel.spin(vex::directionType::rev, 30, vex::velocityUnits::pct);
+    } else { flyWheel.stop(vex::brakeType::brake); }
 
+    if ( Controller1.ButtonA.pressing() ) {
+      launchMotor.spin(vex::directionType::fwd, 80, vex::velocityUnits::pct);
+    } else if ( Controller1.ButtonB.pressing() ) {
+      launchMotor.spin(vex::directionType::rev, 80, vex::velocityUnits::pct);
+    } else { launchMotor.stop(vex::brakeType::brake); }
 
-    vex::task::sleep(20); //Sleep the task for a short amount of time to prevent wasted resources.
- }
+  }
+
+  vex::task::sleep(20); //Sleep the task for a short amount of time to prevent wasted resources.
+}
 
  
 //
