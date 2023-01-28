@@ -76,22 +76,22 @@ void Tr( void ){
  task::sleep(515);
 }
  
-void Tl( void ){
- FrontLeft.spin(directionType::fwd,100,velocityUnits::pct);
- BackLeft.spin(directionType::fwd,100,velocityUnits::pct);
- FrontRight.spin(directionType::rev,100,velocityUnits::pct);
- BackRight.spin(directionType::rev,100,velocityUnits::pct);
- task::sleep(515);
+void Tl( int ms = 515, int pw = 100 ){
+ FrontLeft.spin(directionType::fwd,pw,velocityUnits::pct);
+ BackLeft.spin(directionType::fwd,pw,velocityUnits::pct);
+ FrontRight.spin(directionType::rev,pw,velocityUnits::pct);
+ BackRight.spin(directionType::rev,pw,velocityUnits::pct);
+ task::sleep(ms);
 }
 
 void allStop( void ){
- FrontLeft.stop();
- FrontRight.stop();
- BackLeft.stop();
- BackRight.stop();
- intakeMotor.stop();
- intakeMotor2.stop();
- launchMotor.stop();
+ FrontLeft.stop(vex::brakeType::brake);
+ FrontRight.stop(vex::brakeType::brake);
+ BackLeft.stop(vex::brakeType::brake);
+ BackRight.stop(vex::brakeType::brake);
+ intakeMotor.stop(vex::brakeType::brake);
+ intakeMotor2.stop(vex::brakeType::brake);
+ launchMotor.stop(vex::brakeType::brake);
 }
  
 void newLine(int row, bool isCont = false){
@@ -214,8 +214,31 @@ void autonomous( void ) {
   newLine(1);
   Brain.Screen.print("Autonomous program started");
 
-  goF(100);
+  goB(2000);
+  goF(3500);
 
+  //Tl(25,50);
+
+  //vex::task::sleep(25);
+  //Tl(25, 50);
+  //vex::task::sleep(25);
+  
+  allStop(); vex::task::sleep(25);
+  Tl(25,50);
+  //goF(50); vex::task::sleep(50);
+  launchMotor.spin(vex::directionType::rev, 80, vex::velocityUnits::pct);
+  vex::task::sleep(1000);
+  goF(500, 50);
+  launchMotor.spin(vex::directionType::rev, 80, vex::velocityUnits::pct);
+  vex::task::sleep(1000);
+  //vex::task::sleep(1000);
+  // I have no idea why it's doing this. It seems to be very finnicky. Need to look into vex::task::sleep()
+  //allStop();
+  //vex::task::sleep(100);
+  //goF(50, 25);
+  
+  //vex::task::sleep(50);
+  //launchMotor.spin(vex::directionType::fwd, 80, vex::velocityUnits::pct);
   allStop();
 }
  
